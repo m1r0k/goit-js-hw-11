@@ -2,13 +2,13 @@ import iziToast from "izitoast";
 import SimpleLightbox from "simplelightbox";
 import "izitoast/dist/css/iziToast.min.css";
 import "simplelightbox/dist/simple-lightbox.min.css";
-// import "css-loader/dist/css-loader.min.css";
 
 const API_KEY = "41702545-5a959d1a868233ac463ab5270";
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 const imageGallery = document.getElementById("image-gallery");
 const loader = document.getElementById("loader");
+loader.style.visibility = 'hidden';
 
 let lightbox;
 
@@ -16,11 +16,10 @@ searchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const searchTerm = searchInput.value.trim();
   if (searchTerm === "") return;
+  loader.style.visibility = 'visible';
 
-  // loader.classList.add("loading");
 
   try {
-    loader.classList.add("loading");
     const response = await fetch(`https://pixabay.com/api/?key=${API_KEY}&q=${searchTerm}&image_type=photo&orientation=horizontal&safesearch=true`);
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -30,7 +29,7 @@ searchForm.addEventListener("submit", async (event) => {
   } catch (error) {
     showError();
   } finally {
-    loader.classList.remove("loading");
+    loader.style.visibility = 'hidden';
   }
 });
 
@@ -44,7 +43,7 @@ function displayImages(images) {
   const imageElements = images.map(image => createImageElement(image));
   imageGallery.append(...imageElements);
 
-  lightbox = new SimpleLightbox('.gallery a', {  });
+  lightbox = new SimpleLightbox('.gallery a', {});
   lightbox.refresh();
 }
 
@@ -79,7 +78,7 @@ function createImageElement(image) {
 }
 
 function showError() {
-  // imageGallery.innerHTML = "";
+  imageGallery.innerHTML = "";
   iziToast.error({
     title: 'Error',
     message: 'Sorry, there are no images matching your search query. Please try again!',
