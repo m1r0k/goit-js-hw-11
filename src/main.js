@@ -43,7 +43,12 @@ function displayImages(images) {
   const imageElements = images.map(image => createImageElement(image));
   imageGallery.append(...imageElements);
 
-  lightbox = new SimpleLightbox('.gallery a', {});
+  let options = {
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true
+  };
+  lightbox = new SimpleLightbox('.gallery a', options);
   lightbox.refresh();
 }
 
